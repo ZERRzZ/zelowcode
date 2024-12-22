@@ -1,0 +1,34 @@
+.form-design {
+  display: flex;
+  gap: 1em;
+
+  .item {
+    padding: 0.5em;
+    background: var(--body-bg);
+    cursor: pointer;
+  }
+
+  .left {
+    flex: 0 0 200px;
+    padding: 1em;
+    background: var(--background-color);
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
+  }
+
+  .center {
+    flex: 1;
+    background: var(--background-color);
+
+    .layout {
+      width: 100%;
+    }
+  }
+
+  .right {
+    flex: 0 0 200px;
+    padding: 1em;
+    background: var(--background-color);
+  }
+}

@@ -1,0 +1,37 @@
+:root {
+  --color: #213547;
+  --color-light: #5b6c82;
+  --color-anti: #ffffff;
+  --body-bg: #ffffff;
+  --box-shadow: #c8c8c8;
+  --border: #c8c8c8;
+  --background-color: #c8c8c8;
+
+  --theme-dark: #4096ff;
+  --theme-dark-active: #6eafff;
+  --theme-light: #eff8ff;
+  --theme-light-active: #dcf0ff;
+
+  --danger: red;
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  color-scheme: light dark;
+  color: var(--color);
+  background-color: var(--body-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
