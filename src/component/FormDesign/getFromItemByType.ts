@@ -1,252 +1,252 @@
-import { ZeFormItem, ZeFormTypes } from "@chengzs/zeform";
+import { ZeFormItem, ZeFormTypes } from '@chengzs/zeform'
 
-import { uid } from "@/utils/uid";
+import { uid } from '@/utils/uid'
 
 export const getFromItemByType = (
   type: ZeFormTypes
 ): ZeFormItem | undefined => {
   switch (type) {
-    case "text":
+    case 'text':
       return {
-        type: "text",
+        type: 'text',
         item: {
-          label: "输入框",
+          label: '输入框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { placeholder: "", showCount: false, maxLength: -1 },
-      };
-    case "password":
+        option: { placeholder: '', showCount: false, maxLength: -1 }
+      }
+    case 'password':
       return {
-        type: "password",
+        type: 'password',
         item: {
-          label: "密码框",
+          label: '密码框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
+        }
+      }
+    case 'textarea':
+      return {
+        type: 'textarea',
+        item: {
+          label: '区域输入框',
+          name: uid(),
+          initialValue: '',
+          rules: [],
+          style: {}
         },
-      };
-    case "textarea":
+        option: { placeholder: '', rows: 5, showCount: false, maxLength: -1 }
+      }
+    case 'number':
       return {
-        type: "textarea",
+        type: 'number',
         item: {
-          label: "区域输入框",
+          label: '数字输入框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { placeholder: "", rows: 5, showCount: false, maxLength: -1 },
-      };
-    case "number":
+        option: { controls: true, min: 0, max: 100 }
+      }
+    case 'mentions':
       return {
-        type: "number",
+        type: 'mentions',
         item: {
-          label: "数字输入框",
+          label: '提及',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { controls: true, min: 0, max: 100 },
-      };
-    case "mentions":
+        option: { prefix: '@', rows: 1, options: [] }
+      }
+    case 'radio':
       return {
-        type: "mentions",
+        type: 'radio',
         item: {
-          label: "提及",
+          label: '单选框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { prefix: "@", rows: 1, options: [] },
-      };
-    case "radio":
+        option: { optionType: 'default', options: [] }
+      }
+    case 'checkbox':
       return {
-        type: "radio",
+        type: 'checkbox',
         item: {
-          label: "单选框",
+          label: '多选框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { optionType: "default", options: [] },
-      };
-    case "checkbox":
+        option: { options: [] }
+      }
+    case 'rate':
       return {
-        type: "checkbox",
+        type: 'rate',
         item: {
-          label: "多选框",
+          label: '评分',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { options: [] },
-      };
-    case "rate":
+        option: { count: 5, allowHalf: false }
+      }
+    case 'select':
       return {
-        type: "rate",
+        type: 'select',
         item: {
-          label: "评分",
+          label: '下拉选择框',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { count: 5, allowHalf: false },
-      };
-    case "select":
+        option: { showSearch: false, allowClear: false, mode: '', options: [] }
+      }
+    case 'cascader':
       return {
-        type: "select",
+        type: 'cascader',
         item: {
-          label: "下拉选择框",
+          label: '级联选择器',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { showSearch: false, allowClear: false, mode: "", options: [] },
-      };
-    case "cascader":
+        option: { options: [] }
+      }
+    case 'slider':
       return {
-        type: "cascader",
+        type: 'slider',
         item: {
-          label: "级联选择器",
+          label: '滑动输入条',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { options: [] },
-      };
-    case "slider":
+        option: { range: false, min: 0, max: 100, step: 1 }
+      }
+    case 'switch':
       return {
-        type: "slider",
+        type: 'switch',
         item: {
-          label: "滑动输入条",
+          label: '开关',
           name: uid(),
-          initialValue: "",
+          valuePropName: 'checked',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { range: false, min: 0, max: 100, step: 1 },
-      };
-    case "switch":
+        option: { defaultChecked: false }
+      }
+    case 'date':
       return {
-        type: "switch",
+        type: 'date',
         item: {
-          label: "开关",
+          label: '日期选择',
           name: uid(),
-          valuePropName: "checked",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { defaultChecked: false },
-      };
-    case "date":
+        option: { picker: 'date', showTime: false }
+      }
+    case 'time':
       return {
-        type: "date",
+        type: 'time',
         item: {
-          label: "日期选择",
+          label: '时间选择',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { picker: "date", showTime: false },
-      };
-    case "time":
+        option: { format: 'HH:mm:ss' }
+      }
+    case 'dateRange':
       return {
-        type: "time",
+        type: 'dateRange',
         item: {
-          label: "时间选择",
+          label: '日期范围',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { format: "HH:mm:ss" },
-      };
-    case "dateRange":
+        option: { picker: 'date', showTime: false }
+      }
+    case 'timeRange':
       return {
-        type: "dateRange",
+        type: 'timeRange',
         item: {
-          label: "日期范围",
+          label: '时间范围',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
+          style: {}
         },
-        option: { picker: "date", showTime: false },
-      };
-    case "timeRange":
+        option: { format: 'HH:mm:ss' }
+      }
+    case 'upload':
       return {
-        type: "timeRange",
+        type: 'upload',
         item: {
-          label: "时间范围",
+          label: '上传',
           name: uid(),
-          initialValue: "",
+          initialValue: '',
           rules: [],
-          style: {},
-        },
-        option: { format: "HH:mm:ss" },
-      };
-    case "upload":
-      return {
-        type: "upload",
-        item: {
-          label: "上传",
-          name: uid(),
-          initialValue: "",
-          rules: [],
-          style: {},
+          style: {}
         },
         option: {
-          action: "",
-          accept: "",
+          action: '',
+          accept: '',
           maxSize: 5,
           isChunk: false,
           chunkSize: 2,
           tokenType: -1,
-          listType: "text",
+          listType: 'text',
           maxCount: 1,
-          valueSplit: "",
-          valueType: "string",
-          crop: false,
+          valueSplit: '',
+          valueType: 'string',
+          crop: false
         },
-        innerHtml: "上传",
-      };
-    case "button":
+        innerHtml: '上传'
+      }
+    case 'button':
       return {
-        type: "button",
+        type: 'button',
         item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
-        option: { type: "default" },
-        innerHtml: "普通按钮",
-      };
-    case "submit":
+        option: { type: 'default' },
+        innerHtml: '普通按钮'
+      }
+    case 'submit':
       return {
-        type: "submit",
+        type: 'submit',
         item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
-        option: { type: "primary" },
-        innerHtml: "提交",
-      };
-    case "reset":
+        option: { type: 'primary' },
+        innerHtml: '提交'
+      }
+    case 'reset':
       return {
-        type: "reset",
+        type: 'reset',
         item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
-        option: { type: "default" },
-        innerHtml: "重置",
-      };
-    case "list":
+        option: { type: 'default' },
+        innerHtml: '重置'
+      }
+    case 'list':
       return {
-        type: "list",
-        item: { label: "表单列表", name: uid(), items: [], style: {} },
-      };
+        type: 'list',
+        item: { label: '表单列表', name: uid(), items: [], style: {} }
+      }
   }
-};
+}

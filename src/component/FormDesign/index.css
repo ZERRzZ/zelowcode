@@ -23,6 +23,15 @@
 
     .layout {
       width: 100%;
+      user-select: none;
+
+      .react-grid-item:not(.react-resizable-hide) {
+        z-index: 3;
+      }
+
+      .active {
+        border: 1px solid var(--theme-dark);
+      }
     }
   }
 
