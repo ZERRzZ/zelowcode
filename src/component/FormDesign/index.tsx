@@ -1,5 +1,5 @@
-import { Button, FormProps, Modal } from 'antd'
-import { DragEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { Button, Modal } from 'antd'
+import { DragEvent, useMemo, useState } from 'react'
 
 import RGL, { Layout, WidthProvider } from 'react-grid-layout'
 const GridLayout = WidthProvider(RGL)
@@ -9,15 +9,12 @@ import 'react-resizable/css/styles.css'
 import './index.css'
 import { getFromItemByType } from './getFromItemByType'
 
-import { Gutter } from 'antd/es/grid/row'
-import { useForm } from 'antd/es/form/Form'
-
-import { formOption } from './FormOption'
-import { ZeForm, ZeFormItem, ZeFormProps, ZeFormTypes } from '@chengzs/zeform'
+import { ZeForm, ZeFormItem, ZeFormTypes } from '@chengzs/zeform'
+import { getFormItemByItem } from './getFormItemByItem'
 
 export type ILayout = Layout & { extra: any }
 
-function FormDesign({ initValue, onFinish }: FormDesignProps) {
+function FormDesign() {
   // 表单类型
   const formTypes: ZeFormTypes[] = [
     'text',
@@ -45,24 +42,26 @@ function FormDesign({ initValue, onFinish }: FormDesignProps) {
   ]
 
   const [layout, setLayout] = useState<ILayout[]>([])
-  const [oItems, setOItems] = useState<ZeFormItem[]>([])
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [active, setActive] = useState('')
+  const [aLayout, setALayout] = useState<ILayout>()
 
   const mItems = useMemo(() => {
     const temp = [...layout]
     temp.sort((a, b) => (a.y === b.y ? a.x - b.x : a.y - b.y))
     temp.forEach(v => {
-      if (v.extra.mItems && v.extra.mItems.item) {
-        v.extra.mItems.item.style = {
+      if (v.extra.mItem && v.extra.mItem.item) {
+        v.extra.mItem.item.style = {
           width: `${((v.w / 12) * 100).toFixed(2)}%`
         }
       }
     })
-    return temp.map(v => v.extra.mItems)
+    return temp.map(v => v.extra.mItem)
   }, [layout])
 
-  const aLayout = useMemo(() => layout.find(v => v.i === active), [active])
+  const oItems = useMemo(
+    () => getFormItemByItem(aLayout?.extra.mItem),
+    [aLayout]
+  )
 
   const handleDragStart = (e: DragEvent, val: string) => {
     e.dataTransfer.setData('text/plain', val)
@@ -77,20 +76,21 @@ function FormDesign({ initValue, onFinish }: FormDesignProps) {
     const type = e.dataTransfer.getData('text/plain')
     const item = getFromItemByType(type as ZeFormTypes)
     if (!item) return
-    setLayout(pre => [
-      ...pre,
-      {
-        i: item.item?.name,
-        x: 12,
-        y: pre.length,
-        w: 12,
-        h: 1,
-        extra: {
-          mItems: item
-        }
+    const l = {
+      i: item.item?.name,
+      x: 12,
+      y: layout.length + 1,
+      w: 12,
+      h: 1,
+      extra: {
+        mItem: item
       }
-    ])
-    setActive(item.item?.name)
+    }
+    setLayout(pre => {
+      const arr = [...pre, l]
+      setALayout(arr[arr.length - 1])
+      return arr
+    })
   }
 
   const handleLayoutChange = (l: Layout[]) => {
@@ -101,108 +101,89 @@ function FormDesign({ initValue, onFinish }: FormDesignProps) {
     setLayout(temp)
   }
 
-  const gOptItems: ZeFormItem[] = [
-    {
-      type: 'radio',
-      item: {
-        label: '标签对齐',
-        name: 'labelAlign',
-        initialValue: initValue?.form?.labelAlign || 'right'
-      },
-      option: {
-        optionType: 'button',
-        options: [
-          { label: 'right', value: 'right' },
-          { label: 'left', value: 'left' }
-        ]
+  const handleValuesChange = (v: any) => {
+    const key = Object.keys(v)[0]
+    const k = key.split('_')
+    setALayout(pre => {
+      const temp = { ...pre } as ILayout
+      if (k.length === 1) {
+        temp.extra.mItem[k[0]] = v[key]
+      } else if (k.length === 2) {
+        temp.extra.mItem[k[0]][k[1]] = v[key]
       }
-    },
-    {
-      type: 'number',
-      item: {
-        label: '标签栅格',
-        name: 'labelCol_span',
-        initialValue: initValue?.form?.labelCol?.span || 0
-      },
-      option: { max: 24, min: 0 }
-    },
-    {
-      type: 'number',
-      item: {
-        label: '标签偏移',
-        name: 'labelCol_offset',
-        initialValue: initValue?.form?.labelCol?.offset || 0
-      },
-      option: { max: 24, min: 0 }
-    },
-    {
-      type: 'number',
-      item: {
-        label: '控件栅格',
-        name: 'wrapperCol_span',
-        initialValue: initValue?.form?.wrapperCol?.span || 0
-      },
-      option: { max: 24, min: 0 }
-    },
-    {
-      type: 'number',
-      item: {
-        label: '控件偏移',
-        name: 'wrapperCol_offset',
-        initialValue: initValue?.form?.wrapperCol?.offset || 0
-      },
-      option: { max: 24, min: 0 }
-    },
-    {
-      type: 'radio',
-      item: {
-        label: '布局',
-        name: 'layout',
-        initialValue: initValue?.form?.layout || 'horizontal'
-      },
-      option: {
-        optionType: 'button',
-        options: [
-          { label: 'horizontal', value: 'horizontal' },
-          { label: 'vertical', value: 'vertical' },
-          { label: 'inline', value: 'inline' }
-        ]
-      }
-    }
-  ]
-
-  const handleGOptFormValuesChange = v => {
-    v.layout_col && setMainLayout([v.layout_col])
-    setMainForm(mf => {
-      v.labelAlign && (mf.labelAlign = v.labelAlign)
-      v.labelCol_span && (mf.labelCol!.span = v.labelCol_span)
-      v.labelCol_offset && (mf.labelCol!.offset = v.labelCol_offset)
-      v.wrapperCol_span && (mf.wrapperCol!.span = v.wrapperCol_span)
-      v.wrapperCol_offset && (mf.wrapperCol!.offset = v.wrapperCol_offset)
-      v.layout && (mf.layout = v.layout)
-      return JSON.parse(JSON.stringify(mf))
-    })
-    setMainGutter(mg => {
-      v.gutter_row && (mg[0] = v.gutter_row)
-      v.gutter_col && (mg[1] = v.gutter_col)
-      return [...mg]
+      return temp
     })
   }
 
-  const exportJSON = () =>
-    gOptForm.validateFields().then(v => {
-      // 全局配置表单固定，可以通过实例直接拿到值
-      const myFormProps: ZeFormProps = {
-        form: {
-          labelAlign: v.labelAlign,
-          layout: v.layout,
-          labelCol: { span: v.labelCol_span, offset: v.labelCol_offset },
-          wrapperCol: { span: v.wrapperCol_span, offset: v.wrapperCol_offset }
-        },
-        items: layout // 私有的配置则用特殊的方式拿到
-      }
-      onFinish?.(myFormProps)
-    })
+  // const gOptItems: ZeFormItem[] = [
+  //   {
+  //     type: 'radio',
+  //     item: {
+  //       label: '标签对齐',
+  //       name: 'labelAlign',
+  //       initialValue: initValue?.form?.labelAlign || 'right'
+  //     },
+  //     option: {
+  //       optionType: 'button',
+  //       options: [
+  //         { label: 'right', value: 'right' },
+  //         { label: 'left', value: 'left' }
+  //       ]
+  //     }
+  //   },
+  //   {
+  //     type: 'number',
+  //     item: {
+  //       label: '标签栅格',
+  //       name: 'labelCol_span',
+  //       initialValue: initValue?.form?.labelCol?.span || 0
+  //     },
+  //     option: { max: 24, min: 0 }
+  //   },
+  //   {
+  //     type: 'number',
+  //     item: {
+  //       label: '标签偏移',
+  //       name: 'labelCol_offset',
+  //       initialValue: initValue?.form?.labelCol?.offset || 0
+  //     },
+  //     option: { max: 24, min: 0 }
+  //   },
+  //   {
+  //     type: 'number',
+  //     item: {
+  //       label: '控件栅格',
+  //       name: 'wrapperCol_span',
+  //       initialValue: initValue?.form?.wrapperCol?.span || 0
+  //     },
+  //     option: { max: 24, min: 0 }
+  //   },
+  //   {
+  //     type: 'number',
+  //     item: {
+  //       label: '控件偏移',
+  //       name: 'wrapperCol_offset',
+  //       initialValue: initValue?.form?.wrapperCol?.offset || 0
+  //     },
+  //     option: { max: 24, min: 0 }
+  //   },
+  //   {
+  //     type: 'radio',
+  //     item: {
+  //       label: '布局',
+  //       name: 'layout',
+  //       initialValue: initValue?.form?.layout || 'horizontal'
+  //     },
+  //     option: {
+  //       optionType: 'button',
+  //       options: [
+  //         { label: 'horizontal', value: 'horizontal' },
+  //         { label: 'vertical', value: 'vertical' },
+  //         { label: 'inline', value: 'inline' }
+  //       ]
+  //     }
+  //   }
+  // ]
 
   return (
     <div className="form-design">
@@ -230,18 +211,19 @@ function FormDesign({ initValue, onFinish }: FormDesignProps) {
         >
           {layout.map(v => (
             <div
-              className={`item ${v.i === active ? 'active' : ''}`}
-              key={v.extra.mItems.item?.name}
-              onClick={() => setActive(v.i)}
+              className={`item ${v.i === aLayout?.i ? 'active' : ''}`}
+              key={v.extra.mItem.item?.name}
+              onClick={() => setALayout(v)}
             >
-              {v.extra.mItems.item?.label ||
-                v.extra.mItems.list?.label ||
-                v.extra.mItems.innerHtml}
+              {v.extra.mItem.item?.label ||
+                v.extra.mItem.list?.label ||
+                v.extra.mItem.innerHtml}
             </div>
           ))}
         </GridLayout>
       </div>
       <div className="right">
+        <ZeForm form={{ onValuesChange: handleValuesChange }} items={oItems} />
         <Button type="primary" onClick={() => setPreviewOpen(true)}>
           预览
         </Button>
@@ -259,13 +241,3 @@ function FormDesign({ initValue, onFinish }: FormDesignProps) {
 }
 
 export default FormDesign
-
-/**
- * 表单设计器
- * @param initValue 初始值
- * @param onFinish 完成配置时触发事件
- */
-export interface FormDesignProps {
-  initValue?: ZeFormProps
-  onFinish?: (value: ZeFormProps) => void
-}
