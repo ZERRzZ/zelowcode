@@ -35,3 +35,29 @@
 body {
   margin: 0;
 }
+
+/* 上升隐藏 */
+@keyframes uphide {
+  0% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+
+/* 下降显示 */
+@keyframes downdisplay {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}

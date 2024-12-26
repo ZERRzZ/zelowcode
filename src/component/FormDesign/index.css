@@ -6,6 +6,26 @@
     padding: 0.5em;
     background: var(--body-bg);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    .ibtns {
+      animation: downdisplay 0.3s;
+      display: none;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+    }
+  }
+
+  .item.active {
+    border: 1px solid var(--theme-dark);
+
+    .ibtns {
+      display: flex;
+    }
   }
 
   .left {
@@ -27,10 +47,6 @@
 
       .react-grid-item:not(.react-resizable-hide) {
         z-index: 3;
-      }
-
-      .active {
-        border: 1px solid var(--theme-dark);
       }
     }
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Button, Input } from 'antd'
 
 import './MyOptions.css'
@@ -7,7 +7,11 @@ import { uid } from '../../utils/uid'
 export default function MyOptions({ options, onChange }: MyOptionsProps) {
   const [opt, setOpt] = useState(options)
 
-  const handleChange = (e, type, index) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement>,
+    type: string,
+    index: number
+  ) => {
     setOpt(pre => {
       pre[index][type] = e.target.value
       onChange?.(pre)
@@ -15,7 +19,7 @@ export default function MyOptions({ options, onChange }: MyOptionsProps) {
     })
   }
 
-  const sub = index => {
+  const sub = (index: number) => {
     setOpt(pre => {
       pre.splice(index, 1)
       onChange?.(pre)

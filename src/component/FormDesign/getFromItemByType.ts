@@ -16,7 +16,7 @@ export const getFromItemByType = (
           rules: [],
           style: {}
         },
-        option: { placeholder: '', showCount: false, maxLength: -1 }
+        option: { placeholder: '', showCount: false, maxLength: undefined }
       }
     case 'password':
       return {
@@ -39,7 +39,12 @@ export const getFromItemByType = (
           rules: [],
           style: {}
         },
-        option: { placeholder: '', rows: 5, showCount: false, maxLength: -1 }
+        option: {
+          placeholder: '',
+          rows: 5,
+          showCount: false,
+          maxLength: undefined
+        }
       }
     case 'number':
       return {
@@ -211,14 +216,8 @@ export const getFromItemByType = (
           action: '',
           accept: '',
           maxSize: 5,
-          isChunk: false,
-          chunkSize: 2,
-          tokenType: -1,
           listType: 'text',
-          maxCount: 1,
-          valueSplit: '',
-          valueType: 'string',
-          crop: false
+          maxCount: 1
         },
         innerHtml: '上传'
       }

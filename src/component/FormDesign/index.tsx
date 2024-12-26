@@ -1,4 +1,5 @@
 import { Button, Modal } from 'antd'
+import { CloseOutlined } from '@ant-design/icons'
 import { DragEvent, useMemo, useState } from 'react'
 
 import RGL, { Layout, WidthProvider } from 'react-grid-layout'
@@ -42,26 +43,15 @@ function FormDesign() {
   ]
 
   const [layout, setLayout] = useState<ILayout[]>([])
+  const [active, setActive] = useState<string>('')
+  const [mItems, setMItems] = useState<ZeFormItem[]>([])
   const [previewOpen, setPreviewOpen] = useState(false)
-  const [aLayout, setALayout] = useState<ILayout>()
 
-  const mItems = useMemo(() => {
-    const temp = [...layout]
-    temp.sort((a, b) => (a.y === b.y ? a.x - b.x : a.y - b.y))
-    temp.forEach(v => {
-      if (v.extra.mItem && v.extra.mItem.item) {
-        v.extra.mItem.item.style = {
-          width: `${((v.w / 12) * 100).toFixed(2)}%`
-        }
-      }
-    })
-    return temp.map(v => v.extra.mItem)
-  }, [layout])
-
-  const oItems = useMemo(
-    () => getFormItemByItem(aLayout?.extra.mItem),
-    [aLayout]
-  )
+  const oItems = useMemo(() => {
+    const aLayout = layout.find(v => v.i === active)
+    const items = getFormItemByItem(aLayout)
+    return items
+  }, [layout, active])
 
   const handleDragStart = (e: DragEvent, val: string) => {
     e.dataTransfer.setData('text/plain', val)
@@ -79,40 +69,60 @@ function FormDesign() {
     const l = {
       i: item.item?.name,
       x: 12,
-      y: layout.length + 1,
+      y: 100,
       w: 12,
-      h: 1,
-      extra: {
-        mItem: item
-      }
+      h: 1.5,
+      maxH: 1.5,
+      minH: 1.5,
+      extra: { mItem: item }
     }
-    setLayout(pre => {
-      const arr = [...pre, l]
-      setALayout(arr[arr.length - 1])
-      return arr
-    })
+    setActive(l.i)
+    setLayout(pre => [...pre, l])
   }
 
   const handleLayoutChange = (l: Layout[]) => {
-    const temp = l.map(v => ({
-      ...v,
-      extra: layout.find(lv => lv.i === v.i)?.extra
-    }))
-    setLayout(temp)
+    setLayout(pre => {
+      const temp = l.map(v => ({
+        ...v,
+        extra: pre.find(lv => lv.i === v.i)?.extra
+      }))
+      temp.sort((a, b) => (a.y === b.y ? a.x - b.x : a.y - b.y))
+      for (const v of temp) {
+        if (!v.extra || !v.extra.mItem || !v.extra.mItem.item) continue
+        v.extra.mItem.item.style = {
+          width: `${((v.w / 12) * 100).toFixed(2)}%`
+        }
+      }
+      return temp
+    })
   }
 
   const handleValuesChange = (v: any) => {
     const key = Object.keys(v)[0]
     const k = key.split('_')
-    setALayout(pre => {
-      const temp = { ...pre } as ILayout
-      if (k.length === 1) {
-        temp.extra.mItem[k[0]] = v[key]
-      } else if (k.length === 2) {
-        temp.extra.mItem[k[0]][k[1]] = v[key]
+    setLayout(pre => {
+      const temp = [...pre] as ILayout[]
+      const atemp = pre.find(v => v.i === active)
+      if (!atemp) return pre
+      switch (k[k.length - 1]) {
+        case 'rules':
+          atemp.extra.mItem.item.rules = [{ required: true, message: v[key] }]
+          break
+        default:
+          if (k.length === 2) {
+            atemp.extra.mItem[k[1]] = v[key]
+          } else if (k.length === 3) {
+            atemp.extra.mItem[k[1]][k[2]] = v[key]
+          }
       }
       return temp
     })
+  }
+
+  const handlePreview = () => {
+    console.log(layout.map(v => v.extra.mItem))
+    setMItems(layout.map(v => v.extra.mItem))
+    setPreviewOpen(true)
   }
 
   // const gOptItems: ZeFormItem[] = [
@@ -211,10 +221,13 @@ function FormDesign() {
         >
           {layout.map(v => (
             <div
-              className={`item ${v.i === aLayout?.i ? 'active' : ''}`}
-              key={v.extra.mItem.item?.name}
-              onClick={() => setALayout(v)}
+              className={`item ${v.i === active ? 'active' : ''}`}
+              key={v.i}
+              onClick={() => setActive(v.i)}
             >
+              <div className="ibtns">
+                <CloseOutlined style={{ color: 'red' }} />
+              </div>
               {v.extra.mItem.item?.label ||
                 v.extra.mItem.list?.label ||
                 v.extra.mItem.innerHtml}
@@ -224,7 +237,7 @@ function FormDesign() {
       </div>
       <div className="right">
         <ZeForm form={{ onValuesChange: handleValuesChange }} items={oItems} />
-        <Button type="primary" onClick={() => setPreviewOpen(true)}>
+        <Button type="primary" onClick={handlePreview}>
           预览
         </Button>
       </div>
@@ -233,6 +246,7 @@ function FormDesign() {
         width="70%"
         open={previewOpen}
         onCancel={() => setPreviewOpen(false)}
+        destroyOnClose
       >
         <ZeForm items={mItems} />
       </Modal>
