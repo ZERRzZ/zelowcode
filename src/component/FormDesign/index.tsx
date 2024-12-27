@@ -18,28 +18,28 @@ export type ILayout = Layout & { extra: any }
 
 function FormDesign() {
   // 表单类型
-  const formTypes: ZeFormTypes[] = [
-    'text',
-    'password',
-    'textarea',
-    'number',
-    'mentions',
-    'radio',
-    'checkbox',
-    'select',
-    'cascader',
-    'rate',
-    'slider',
-    'switch',
-    'color',
-    'time',
-    'timeRange',
-    'date',
-    'dateRange',
-    'upload',
-    'button',
-    'submit',
-    'reset',
+  const formTypes = [
+    { type: 'text', label: '文本框' },
+    { type: 'password', label: '密码框' },
+    { type: 'textarea', label: '多行文本框' },
+    { type: 'number', label: '数字输入框' },
+    { type: 'mentions', label: '提及框' },
+    { type: 'radio', label: '单选框' },
+    { type: 'checkbox', label: '多选框' },
+    { type: 'select', label: '下拉框' },
+    { type: 'cascader', label: '级联框' },
+    { type: 'rate', label: '分数框' },
+    { type: 'slider', label: '滑块' },
+    { type: 'switch', label: '开关' },
+    { type: 'color', label: '颜色选择框' },
+    { type: 'time', label: '时间选择' },
+    { type: 'timeRange', label: '时间范围' },
+    { type: 'date', label: '日期选择' },
+    { type: 'dateRange', label: '日期范围' },
+    { type: 'upload', label: '上传' },
+    { type: 'button', label: '按钮' },
+    { type: 'submit', label: '提交按钮' },
+    { type: 'reset', label: '重置按钮' }
     // 'list'
   ]
 
@@ -137,7 +137,10 @@ function FormDesign() {
   }
 
   const handlePreview = () => {
-    console.log(layout.map(v => v.extra.mItem), 'item')
+    console.log(
+      layout.map(v => v.extra.mItem),
+      'item'
+    )
     console.log(mForm, 'form')
     setPreviewOpen(true)
   }
@@ -158,11 +161,11 @@ function FormDesign() {
           return (
             <div
               className="item"
-              key={v}
+              key={v.type}
               draggable={true}
-              onDragStart={e => handleDragStart(e, v)}
+              onDragStart={e => handleDragStart(e, v.type)}
             >
-              {v}
+              {v.label}
             </div>
           )
         })}
