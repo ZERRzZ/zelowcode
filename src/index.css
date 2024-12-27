@@ -5,7 +5,7 @@
   --body-bg: #ffffff;
   --box-shadow: #c8c8c8;
   --border: #c8c8c8;
-  --background-color: #c8c8c8;
+  --background-color: #f0f0f0;
 
   --theme-dark: #4096ff;
   --theme-dark-active: #6eafff;
@@ -26,6 +26,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+::-webkit-scrollbar {
+  width: 0.5vw;
+  height: 0.5vw;
+  background: var(--background-color);
+  position: absolute;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 1vw;
+  background: var(--border);
+  background-clip: padding-box;
+  cursor: pointer;
 }
 
 * {

@@ -1,7 +1,9 @@
+import { Modal } from 'antd'
 import { ZeFormItem } from '@chengzs/zeform'
+
 import FormDesign, { ILayout } from '.'
 import MyOptions from './MyOptions'
-import { Modal } from 'antd'
+import LabelCol from './labelCol'
 
 export const getFormItemByItem = (layout?: ILayout) => {
   if (!layout) return []
@@ -61,6 +63,13 @@ export const getFormItemByItem = (layout?: ILayout) => {
         }
       }
     }
+    if (k === 'labelCol') {
+      return {
+        type: 'custom',
+        item: { label: k, name: `${layout.i}_item_${k}` },
+        innerHtml: <LabelCol value={item.item.labelCol} />
+      }
+    }
     const type = types[keys.findIndex(v => v.includes(k))]
     if (!type) return undefined
     return {
@@ -94,7 +103,7 @@ export const getFormItemByItem = (layout?: ILayout) => {
     if (k === 'options') {
       return {
         type: 'custom',
-        item: { label: '选项', name: `${layout.i}_option_${k}` },
+        item: { label: k, name: `${layout.i}_option_${k}` },
         innerHtml: <MyOptions options={item.option.options} />
       }
     }

@@ -1,4 +1,4 @@
-import { Button, Modal } from 'antd'
+import { Button, FormProps, Modal, Tabs } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
 import { DragEvent, useMemo, useState } from 'react'
 
@@ -10,8 +10,9 @@ import 'react-resizable/css/styles.css'
 import './index.css'
 import { getFromItemByType } from './getFromItemByType'
 
-import { ZeForm, ZeFormItem, ZeFormTypes } from '@chengzs/zeform'
+import { ZeForm, ZeFormTypes } from '@chengzs/zeform'
 import { getFormItemByItem } from './getFormItemByItem'
+import { gItems } from './gItems'
 
 export type ILayout = Layout & { extra: any }
 
@@ -39,12 +40,12 @@ function FormDesign() {
     'button',
     'submit',
     'reset',
-    'list'
+    // 'list'
   ]
 
   const [layout, setLayout] = useState<ILayout[]>([])
   const [active, setActive] = useState<string>('')
-  const [mItems, setMItems] = useState<ZeFormItem[]>([])
+  const [mForm, setMForm] = useState<FormProps>({})
   const [previewOpen, setPreviewOpen] = useState(false)
 
   const oItems = useMemo(() => {
@@ -119,81 +120,36 @@ function FormDesign() {
     })
   }
 
+  const handleGValuesChange = (v: any) => {
+    const key = Object.keys(v)[0]
+    const k = key.split('_')
+    setMForm(pre => {
+      const temp: any = { ...pre }
+      if (k.length === 1) {
+        temp[k[0]] = v[key]
+      } else if (k.length === 2) {
+        temp[k[0]]
+          ? (temp[k[0]][k[1]] = v[key])
+          : (temp[k[0]] = { [k[1]]: v[key] })
+      }
+      return temp
+    })
+  }
+
   const handlePreview = () => {
-    console.log(layout.map(v => v.extra.mItem))
-    setMItems(layout.map(v => v.extra.mItem))
+    console.log(layout.map(v => v.extra.mItem), 'item')
+    console.log(mForm, 'form')
     setPreviewOpen(true)
   }
 
-  // const gOptItems: ZeFormItem[] = [
-  //   {
-  //     type: 'radio',
-  //     item: {
-  //       label: '标签对齐',
-  //       name: 'labelAlign',
-  //       initialValue: initValue?.form?.labelAlign || 'right'
-  //     },
-  //     option: {
-  //       optionType: 'button',
-  //       options: [
-  //         { label: 'right', value: 'right' },
-  //         { label: 'left', value: 'left' }
-  //       ]
-  //     }
-  //   },
-  //   {
-  //     type: 'number',
-  //     item: {
-  //       label: '标签栅格',
-  //       name: 'labelCol_span',
-  //       initialValue: initValue?.form?.labelCol?.span || 0
-  //     },
-  //     option: { max: 24, min: 0 }
-  //   },
-  //   {
-  //     type: 'number',
-  //     item: {
-  //       label: '标签偏移',
-  //       name: 'labelCol_offset',
-  //       initialValue: initValue?.form?.labelCol?.offset || 0
-  //     },
-  //     option: { max: 24, min: 0 }
-  //   },
-  //   {
-  //     type: 'number',
-  //     item: {
-  //       label: '控件栅格',
-  //       name: 'wrapperCol_span',
-  //       initialValue: initValue?.form?.wrapperCol?.span || 0
-  //     },
-  //     option: { max: 24, min: 0 }
-  //   },
-  //   {
-  //     type: 'number',
-  //     item: {
-  //       label: '控件偏移',
-  //       name: 'wrapperCol_offset',
-  //       initialValue: initValue?.form?.wrapperCol?.offset || 0
-  //     },
-  //     option: { max: 24, min: 0 }
-  //   },
-  //   {
-  //     type: 'radio',
-  //     item: {
-  //       label: '布局',
-  //       name: 'layout',
-  //       initialValue: initValue?.form?.layout || 'horizontal'
-  //     },
-  //     option: {
-  //       optionType: 'button',
-  //       options: [
-  //         { label: 'horizontal', value: 'horizontal' },
-  //         { label: 'vertical', value: 'vertical' },
-  //         { label: 'inline', value: 'inline' }
-  //       ]
-  //     }
-  //   }
-  // ]
+  const handleDelete = (i: string) => {
+    const index = layout.findIndex(v => v.i === i)
+    setLayout(pre => {
+      const temp = [...pre]
+      temp.splice(index, 1)
+      return temp
+    })
+  }
 
   return (
     <div className="form-design">
@@ -226,7 +182,10 @@ function FormDesign() {
               onClick={() => setActive(v.i)}
             >
               <div className="ibtns">
-                <CloseOutlined style={{ color: 'red' }} />
+                <CloseOutlined
+                  style={{ color: 'red' }}
+                  onClick={() => handleDelete(v.i)}
+                />
               </div>
               {v.extra.mItem.item?.label ||
                 v.extra.mItem.list?.label ||
@@ -236,7 +195,31 @@ function FormDesign() {
         </GridLayout>
       </div>
       <div className="right">
-        <ZeForm form={{ onValuesChange: handleValuesChange }} items={oItems} />
+        <Tabs
+          defaultActiveKey="2"
+          items={[
+            {
+              key: '1',
+              label: '控件配置',
+              children: (
+                <ZeForm
+                  form={{ onValuesChange: handleValuesChange }}
+                  items={oItems}
+                />
+              )
+            },
+            {
+              key: '2',
+              label: '全局配置',
+              children: (
+                <ZeForm
+                  form={{ onValuesChange: handleGValuesChange }}
+                  items={gItems}
+                />
+              )
+            }
+          ]}
+        />
         <Button type="primary" onClick={handlePreview}>
           预览
         </Button>
@@ -248,7 +231,7 @@ function FormDesign() {
         onCancel={() => setPreviewOpen(false)}
         destroyOnClose
       >
-        <ZeForm items={mItems} />
+        <ZeForm form={mForm} items={layout.map(v => v.extra.mItem)} />
       </Modal>
     </div>
   )

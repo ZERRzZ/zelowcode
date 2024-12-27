@@ -13,6 +13,7 @@ export const getFromItemByType = (
           label: '输入框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -25,6 +26,7 @@ export const getFromItemByType = (
           label: '密码框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         }
@@ -36,6 +38,7 @@ export const getFromItemByType = (
           label: '区域输入框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -53,6 +56,7 @@ export const getFromItemByType = (
           label: '数字输入框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -65,6 +69,7 @@ export const getFromItemByType = (
           label: '提及',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -77,6 +82,7 @@ export const getFromItemByType = (
           label: '单选框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -89,6 +95,7 @@ export const getFromItemByType = (
           label: '多选框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -101,6 +108,7 @@ export const getFromItemByType = (
           label: '评分',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -113,6 +121,7 @@ export const getFromItemByType = (
           label: '下拉选择框',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -125,6 +134,7 @@ export const getFromItemByType = (
           label: '级联选择器',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -137,6 +147,7 @@ export const getFromItemByType = (
           label: '滑动输入条',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -149,10 +160,23 @@ export const getFromItemByType = (
           label: '开关',
           name: uid(),
           valuePropName: 'checked',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
         option: { defaultChecked: false }
+      }
+    case 'color':
+      return {
+        type: 'color',
+        item: {
+          label: '颜色',
+          name: uid(),
+          initialValue: '',
+          labelCol: undefined,
+          rules: [],
+          style: {}
+        }
       }
     case 'date':
       return {
@@ -161,6 +185,7 @@ export const getFromItemByType = (
           label: '日期选择',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -173,6 +198,7 @@ export const getFromItemByType = (
           label: '时间选择',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -185,6 +211,7 @@ export const getFromItemByType = (
           label: '日期范围',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -197,6 +224,7 @@ export const getFromItemByType = (
           label: '时间范围',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -209,6 +237,7 @@ export const getFromItemByType = (
           label: '上传',
           name: uid(),
           initialValue: '',
+          labelCol: undefined,
           rules: [],
           style: {}
         },
@@ -224,28 +253,28 @@ export const getFromItemByType = (
     case 'button':
       return {
         type: 'button',
-        item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
+        item: { name: uid(), style: {} },
         option: { type: 'default' },
         innerHtml: '普通按钮'
       }
     case 'submit':
       return {
         type: 'submit',
-        item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
+        item: { name: uid(), style: {} },
         option: { type: 'primary' },
         innerHtml: '提交'
       }
     case 'reset':
       return {
         type: 'reset',
-        item: { name: uid(), wrapperCol: { span: 0, offset: 0 }, style: {} },
+        item: { name: uid(), style: {} },
         option: { type: 'default' },
         innerHtml: '重置'
       }
-    case 'list':
-      return {
-        type: 'list',
-        item: { label: '表单列表', name: uid(), items: [], style: {} }
-      }
+    // case 'list':
+    //   return {
+    //     type: 'list',
+    //     item: { label: '表单列表', name: uid(), items: [], style: {} }
+    //   }
   }
 }
