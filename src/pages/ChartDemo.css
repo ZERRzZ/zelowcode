@@ -1,0 +1,120 @@
+.chart-demo {
+  width: 100%;
+  height: calc(100vh - 54px - 2em);
+  overflow: hidden;
+  display: flex;
+  gap: 1em;
+
+  .title {
+    font-weight: 800;
+
+    &::before {
+      content: '';
+      width: 3px;
+      height: 0.8em;
+      margin-right: 0.6em;
+      background: var(--theme-color);
+      display: inline-block;
+    }
+  }
+
+  .left {
+    flex: 0 200px;
+    padding: 1em;
+    background: var(--main-background);
+    border: 1px solid var(--main-border);
+    overflow: auto;
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
+
+    .charts {
+      flex: 1;
+      display: flex;
+      flex-flow: column;
+      gap: 1em;
+
+      > div {
+        width: 100%;
+        flex: 100px;
+        line-height: 100px;
+        text-align: center;
+        border: 1px solid var(--main-border);
+        background-size: 80% 80%;
+        background-position: center;
+        background-repeat: no-repeat;
+        transition: all 0.3s;
+        cursor: pointer;
+
+        &:hover {
+          background-size: 100% 100%;
+        }
+      }
+    }
+  }
+
+  .center {
+    flex: 1;
+    background: var(--main-background);
+    overflow: auto;
+
+    .vue-grid-layout {
+      min-height: 100%;
+      background: var(--sub-background);
+
+      .vue-grid-item:not(.vue-grid-placeholder) {
+        padding: 1em;
+        touch-action: none;
+        background: var(--main-background);
+      }
+    }
+
+    .citem {
+      width: 100%;
+      height: 100%;
+    }
+
+    .tool {
+      padding: 0.4em;
+      background: var(--sub-background);
+      position: absolute;
+      right: 0.4em;
+      top: 0.4em;
+    }
+  }
+
+  .right {
+    width: 0;
+    padding: 0;
+    background: var(--main-background);
+    border: 1px solid var(--main-border);
+    transition: all 0.3s;
+    overflow: hidden;
+    display: none;
+    flex-flow: column;
+    gap: 1em;
+
+    .tab {
+      flex: 1;
+      overflow: auto;
+    }
+
+    .color-custom {
+      display: flex;
+      gap: 1em;
+      align-items: center;
+    }
+  }
+}
+
+.topdown-move,
+.topdown-leave-active,
+.topdown-enter-active {
+  transition: all 0.3s ease-out;
+}
+
+.topdown-enter,
+.topdown-leave-to {
+  opacity: 0;
+  transform: translateY(-30px);
+}
