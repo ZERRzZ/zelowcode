@@ -16,12 +16,12 @@ function App() {
       key: '2',
       label: 'FormDesign',
       children: <FormDesignDemo />
-    },
-    {
-      key: '3',
-      label: 'ChartDesign',
-      children: <ChartDemo />
     }
+    // {
+    //   key: '3',
+    //   label: 'ChartDesign',
+    //   children: <ChartDemo />
+    // }
   ]
 
   return (

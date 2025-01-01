@@ -271,10 +271,10 @@ export const getFromItemByType = (
         option: { type: 'default' },
         innerHtml: '重置'
       }
-    // case 'list':
-    //   return {
-    //     type: 'list',
-    //     item: { label: '表单列表', name: uid(), items: [], style: {} }
-    //   }
+    case 'list':
+      return {
+        type: 'list',
+        item: { label: '表单列表', name: uid(), items: [], style: {} }
+      }
   }
 }

@@ -1,14 +1,14 @@
-import { Modal } from 'antd'
 import { ZeFormItem } from '@chengzs/zeform'
 
-import FormDesign, { ILayout } from '.'
+import { ILayout } from '.'
 import MyOptions from './MyOptions'
 import LabelCol from './labelCol'
+import FDChildren from './FDChildren'
 
 export const getFormItemByItem = (layout?: ILayout) => {
-  if (!layout) return []
+  if (!layout) return
 
-  const item = layout?.extra?.mItem || []
+  const item = layout.extra?.mItem || []
 
   const k1 = Object.keys(item?.item || {})
   const k2 = Object.keys(item?.option || {})
@@ -43,24 +43,10 @@ export const getFormItemByItem = (layout?: ILayout) => {
 
   const r1 = k1.map(k => {
     if (k === 'items') {
-      console.log(11)
       return {
-        type: 'button',
-        innerHtml: '配置子项',
-        option: {
-          type: 'primary',
-          onClick: () => {
-            Modal.confirm({
-              title: '子项配置',
-              width: '90%',
-              content: <FormDesign />,
-              icon: null,
-              maskClosable: true,
-              closable: true,
-              footer: null
-            })
-          }
-        }
+        type: 'custom',
+        item: { label: k, name: `${layout.i}_item_${k}` },
+        innerHtml: <FDChildren value={item.item.items} />
       }
     }
     if (k === 'labelCol') {
@@ -208,7 +194,7 @@ export const getFormItemByItem = (layout?: ILayout) => {
       }
     : undefined
 
-  const res = [...r1, ...r2, r3].filter(v => v)
+  const items = [...r1, ...r2, r3].filter(v => v) as ZeFormItem[]
 
-  return res as ZeFormItem[]
+  return { items }
 }

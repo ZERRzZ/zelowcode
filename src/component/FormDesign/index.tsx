@@ -1,6 +1,6 @@
 import { Button, FormProps, Modal, Tabs } from 'antd'
 import { CloseOutlined } from '@ant-design/icons'
-import { DragEvent, useMemo, useState } from 'react'
+import { DragEvent, useEffect, useMemo, useState } from 'react'
 
 import RGL, { Layout, WidthProvider } from 'react-grid-layout'
 const GridLayout = WidthProvider(RGL)
@@ -10,13 +10,19 @@ import 'react-resizable/css/styles.css'
 import './index.css'
 import { getFromItemByType } from './getFromItemByType'
 
-import { ZeForm, ZeFormTypes } from '@chengzs/zeform'
+import { ZeForm, ZeFormItem, ZeFormTypes } from '@chengzs/zeform'
 import { getFormItemByItem } from './getFormItemByItem'
 import { gItems } from './gItems'
 
 export type ILayout = Layout & { extra: any }
 
-function FormDesign() {
+interface IProps {
+  showSubmit?: boolean
+  value?: ZeFormItem[]
+  onChange?: (v: ZeFormItem[]) => void
+}
+
+function FormDesign({ showSubmit = false, value, onChange }: IProps) {
   // 表单类型
   const formTypes = [
     { type: 'text', label: '文本框' },
@@ -39,8 +45,8 @@ function FormDesign() {
     { type: 'upload', label: '上传' },
     { type: 'button', label: '按钮' },
     { type: 'submit', label: '提交按钮' },
-    { type: 'reset', label: '重置按钮' }
-    // 'list'
+    { type: 'reset', label: '重置按钮' },
+    { type: 'list', label: 'list 列表' }
   ]
 
   const [layout, setLayout] = useState<ILayout[]>([])
@@ -48,10 +54,26 @@ function FormDesign() {
   const [mForm, setMForm] = useState<FormProps>({})
   const [previewOpen, setPreviewOpen] = useState(false)
 
+  useEffect(() => {
+    value &&
+      setLayout(
+        value?.map(v => ({
+          i: v.item?.name,
+          x: 12,
+          y: 100,
+          w: 12,
+          h: 1.5,
+          maxH: 1.5,
+          minH: 1.5,
+          extra: { mItem: v }
+        })) || []
+      )
+  }, [value])
+
   const oItems = useMemo(() => {
     const aLayout = layout.find(v => v.i === active)
-    const items = getFormItemByItem(aLayout)
-    return items
+    const res = getFormItemByItem(aLayout)
+    return res?.items
   }, [layout, active])
 
   const handleDragStart = (e: DragEvent, val: string) => {
@@ -226,6 +248,14 @@ function FormDesign() {
         <Button type="primary" onClick={handlePreview}>
           预览
         </Button>
+        {showSubmit && (
+          <Button
+            type="primary"
+            onClick={() => onChange?.(layout.map(v => v.extra.mItem))}
+          >
+            保存
+          </Button>
+        )}
       </div>
       <Modal
         title="预览"
