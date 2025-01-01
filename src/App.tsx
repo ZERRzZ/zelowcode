@@ -3,7 +3,7 @@ import { Tabs } from 'antd'
 import './App.css'
 import FormDemo from '@/pages/FormDemo'
 import FormDesignDemo from './pages/FormDesignDemo'
-import ChartDemo from '@/pages/ChartDemo'
+// import ChartDemo from '@/pages/ChartDemo'
 
 function App() {
   const items = [
