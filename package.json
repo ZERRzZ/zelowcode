@@ -12,6 +12,7 @@
   "dependencies": {
     "@chengzs/zeform": "^1.1.0",
     "antd": "^5.22.5",
+    "echarts": "^5.6.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-grid-layout": "^1.5.0"

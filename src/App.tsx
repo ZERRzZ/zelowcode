@@ -3,6 +3,7 @@ import { Tabs } from 'antd'
 import './App.css'
 import FormDemo from '@/pages/FormDemo'
 import FormDesignDemo from './pages/FormDesignDemo'
+import MyBar from './component/MyChart/MyBar'
 // import ChartDemo from '@/pages/ChartDemo'
 
 function App() {
@@ -16,12 +17,26 @@ function App() {
       key: '2',
       label: 'FormDesign',
       children: <FormDesignDemo />
+    },
+    {
+      key: '3',
+      label: 'ChartDesign',
+      // children: <ChartDemo />
+      children: (
+        <MyBar
+          height="1000px"
+          data={{
+            name: 'xxx',
+            data: [
+              { name: '1', value: '4' },
+              { name: '2', value: '3' },
+              { name: '3', value: '2' },
+              { name: '4', value: '1' }
+            ]
+          }}
+        />
+      )
     }
-    // {
-    //   key: '3',
-    //   label: 'ChartDesign',
-    //   children: <ChartDemo />
-    // }
   ]
 
   return (

@@ -179,3 +179,10 @@
 //   }
 //   return temp
 // }
+
+export const defaultStyle = {
+  tcolor: '#000',
+  color: 'lightblue',
+  tooltipShow: true,
+  legendShow: true
+}
