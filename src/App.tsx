@@ -3,7 +3,7 @@ import { Tabs } from 'antd'
 import './App.css'
 import FormDemo from '@/pages/FormDemo'
 import FormDesignDemo from './pages/FormDesignDemo'
-import MyBar from './component/MyChart/MyBar'
+import MyBarH from './component/MyChart/MyBarH'
 // import ChartDemo from '@/pages/ChartDemo'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
       label: 'ChartDesign',
       // children: <ChartDemo />
       children: (
-        <MyBar
+        <MyBarH
           height="1000px"
           data={{
             name: 'xxx',
