@@ -4,6 +4,7 @@ import './App.css'
 import FormDemo from '@/pages/FormDemo'
 import FormDesignDemo from './pages/FormDesignDemo'
 import MyBarH from './component/MyChart/MyBarH'
+import Chart3D from './pages/Chart3D'
 // import ChartDemo from '@/pages/ChartDemo'
 
 function App() {
@@ -35,6 +36,15 @@ function App() {
             ]
           }}
         />
+      )
+    },
+    {
+      key: '4',
+      label: 'Chart3D',
+      children: (
+        <div style={{ width: '100%', height: 'calc(100vh - 102px)'}}>
+          <Chart3D width="100%" height="100%" />
+        </div>
       )
     }
   ]
